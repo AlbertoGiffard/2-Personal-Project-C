@@ -141,11 +141,12 @@ struct
 struct
 {
  int id;
- char name[51];
- char lastName[51];
- float salary;
- int sector;
  int isEmpty;
+ int sector;
+ char aboveAvg;
+ char lastName[51];
+ char name[51];
+ float salary;
 }typedef Employee;
 
 //Esta funcion será el menu principal que se mostrara para la resolucion del usuario
@@ -167,7 +168,16 @@ int removeEmployee(Employee[], int, int);
 //verifica que no haya ningun empleado en la nomina
 int fileEmpty(Employee[], int);
 // recorre el array y me devuelve el indice del vector
-int runForArray(Employee[], int, int);
+int findEmployeeById(Employee[], int, int);
+//Ordena el array de empleados por apellido y sector de manera ascendente o descendente
+int sortEmployees(Employee[], int);
+//Imprime el array de empleados de forma encolumnada
+int printEmployees(Employee[], int, float, float);
+//para determinar total y promedio
+float totalSalary(Employee[], int);
+float avgSalary(Employee[], int);
+// para determinar que este sobre el promedio
+int aboveAvg(Employee[], int);
 
 int main()
 {
@@ -242,6 +252,23 @@ int main()
                     scanf("%d", &idToChange);
                     removeEmployee(listOfEmployee, JUNIOR, idToChange);
                 }
+                break;
+            case 4:
+                empty = fileEmpty(listOfEmployee, JUNIOR);
+                if (empty == JUNIOR)
+                {
+                    printf("\t\t\t    -\n");
+                    printf("Debe ingresar al menos un empleado para poder ordenarlo\n");
+                    printf("\t\t\t    -\n");
+                }
+                else
+                {
+                    sortEmployees(listOfEmployee, JUNIOR);
+                }
+                break;
+            case 5:
+                printf("Saliendo del Sistema...\n");
+                break;
         }
     } while (option != 5);
 
@@ -273,6 +300,7 @@ int initEmployees(Employee list[], int count)
     for (i = 0; i  < count; i++)
     {
         list[i].isEmpty = 1;
+        list[i].aboveAvg = ' ';
     }
 
     return 0;
@@ -397,7 +425,7 @@ int modifyEmployee(Employee list[], int count, int id)
 
     toModify = 'n';
 
-    i = runForArray(list, count, id);
+    i = findEmployeeById(list, count, id);
     if(i != -1)
     {
 
@@ -542,7 +570,7 @@ int removeEmployee(Employee list[], int count, int id)
     return 0;
 }
 
-int runForArray(Employee list[], int count, int id)
+int findEmployeeById(Employee list[], int count, int id)
 {
     int i;
     int vector;
@@ -559,4 +587,197 @@ int runForArray(Employee list[], int count, int id)
 
     }
     return vector;
+}
+
+int sortEmployees(Employee list[], int count)
+{
+    int i;
+    int j;
+    int sumSalary;
+    int sumAvgSalary;
+    int option;
+    Employee firstObject[count];
+
+    printf("1. Ordenar por Apellido\n");
+    printf("2. Ordenar por Sector\n");
+    printf("3. Regresar\n");
+    printf("Ingrese su opción: ");
+    scanf("%d", &option);
+    switch (option)
+    {
+        case 1:
+                printf("1. De forma ascendente\n");
+                printf("2. De forma descendente\n");
+                printf("3. Regresar\n");
+                printf("Ingrese su opción: ");
+                scanf("%d", &option);
+                switch (option)
+                {
+                    case 1:
+                        //ordenar por apellido ascendente
+                        for (i = 0; i < count; i++)
+                        {
+                            for (j = i + 1; j < count; j++)
+                            {
+                                if (strcmp(list[i].lastName, list[j].lastName) > 0)
+                                {
+                                    firstObject[i] = list[i];
+                                    list[i] = list[j];
+                                    list[j] = firstObject[i];
+                                }
+                            }
+                        }
+                        printf("-------------------------------\n");
+                        printf("|           Resultado         |\n");
+                        printf("-------------------------------\n");
+                        printf("Ordenado con éxito\n");
+                        break;
+                    case 2:
+                        //ordenar por apellido descendente
+                        for (i = 0; i < count; i++)
+                        {
+                            for (j = i + 1; j < count; j++)
+                            {
+                                if (strcmp(list[i].lastName, list[j].lastName) < 0)
+                                {
+                                    firstObject[i] = list[i];
+                                    list[i] = list[j];
+                                    list[j] = firstObject[i];
+                                }
+                            }
+                        }
+                        printf("-------------------------------\n");
+                        printf("|           Resultado         |\n");
+                        printf("-------------------------------\n");
+                        printf("Ordenado con éxito\n");
+                        break;
+                    default:
+                        break;
+                }
+        break;
+        case 2:
+                printf("1. De menor a mayor\n");
+                printf("2. De mayor a menor\n");
+                printf("3. Regresar\n");
+                printf("Ingrese su opción: ");
+                scanf("%d", &option);
+                switch (option)
+                {
+                    case 1:
+                        //ordenar por sector ascendente
+                        for (i = 0; i < count; i++)
+                        {
+                            for (j = i + 1; j < count; j++)
+                            {
+                                if (list[i].sector <= list[j].sector)
+                                {
+                                    firstObject[i] = list[i];
+                                    list[i] = list[j];
+                                    list[j] = firstObject[i];
+                                }
+                            }
+                        }
+                        printf("-------------------------------\n");
+                        printf("|           Resultado         |\n");
+                        printf("-------------------------------\n");
+                        printf("Ordenado con éxito\n");
+                        break;
+                    case 2:
+                        //ordenar por sector descendente
+                        for (i = 0; i < count; i++)
+                        {
+                            for (j = i + 1; j > count; j++)
+                            {
+                                if (list[i].sector <= list[j].sector)
+                                {
+                                    firstObject[i] = list[i];
+                                    list[i] = list[j];
+                                    list[j] = firstObject[i];
+                                }
+                            }
+                        }
+                        printf("-------------------------------\n");
+                        printf("|           Resultado         |\n");
+                        printf("-------------------------------\n");
+                        printf("Ordenado con éxito\n");
+                        break;
+                    default:
+                        break;
+                }
+        break;
+        default:
+            break;
+    }
+    sumSalary = totalSalary(list, count);
+    sumAvgSalary = avgSalary(list, count);
+    aboveAvg(list, count);
+    printEmployees(list, count, sumSalary, sumAvgSalary);
+    return 0;
+}
+float totalSalary(Employee list[], int count)
+{
+    int i;
+    float total;
+
+    total = 0;
+
+    for (i = 0; i < count; i++)
+    {
+        if (list[i].isEmpty != 1)
+        {
+            total += list[i].salary;
+        }
+
+    }
+    return total;
+}
+float avgSalary(Employee list[], int count)
+{
+    int i;
+    float total;
+
+    total = 0;
+
+    for (i = 0; i < count; i++)
+    {
+        if (list[i].isEmpty != 1)
+        {
+            total += list[i].salary;
+        }
+
+    }
+    total = total / i;
+    return total;
+}
+int aboveAvg(Employee list[], int count)
+{
+    int i;
+    int avg;
+
+    avg = avgSalary(list, count);
+
+    for (i = 0; i < count; i++)
+    {
+        if (list[i].salary >= avg)
+        {
+            list[i].aboveAvg = 'X';
+        }
+    }
+    return 0;
+}
+int printEmployees(Employee list[], int count, float totalSalary, float avgSalary)
+{
+    int i;
+    printf("-------------------------------------------------------------------------------------------------------------\n");
+    printf("| ID | Nombre y Apellido | Sector |   Salario   | Promedio del Salario | Total de Salarios | Sobre el Promedio  |\n");
+    printf("-------------------------------------------------------------------------------------------------------------\n");
+    for (i = 0; i < count; i++)
+    {
+        if (list[i].isEmpty != 1)
+        {
+    printf("| %d    \t%s %s\t\t%d\t%.2f\t%.2f\t%.2f\t%c\t|\n", list[i].id, list[i].name, list[i].lastName, list[i].sector, list[i].salary, avgSalary, totalSalary, list[i].aboveAvg);
+        }
+    }
+
+    return 0;
 }
