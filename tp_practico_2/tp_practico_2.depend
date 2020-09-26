@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1601138909 source:c:\users\alber\onedrive\documentos\utn\1er cuatrimestre\laboratorio i  - programacion i\tp\tp_laboratorio_2\tp_practico_2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<wchar.h>
+	<locale.h>
+	<ctype.h>
+	<string.h>
+
