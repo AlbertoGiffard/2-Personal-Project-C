@@ -137,7 +137,7 @@ struct
 #include <ctype.h>
 #include <string.h>
 #include "ArrayEmployees.h"
-#define PAYROLL 3
+#define PAYROLL 1000
 
 /* struct
 {
@@ -190,14 +190,10 @@ int main()
     int empty;
     int add;
     int space;
-    Employee listOfEmployee[PAYROLL] = {
-        {1, 0, 5, '.', "Giffard", "Alberto", 25000},
-        {2, 0, 9, '.', "Lloveras", "Aniuska", 75000},
-        {3, 0, 6, '.', "Barranco", "Gustavo", 55000},
-    };
+    Employee listOfEmployee[PAYROLL];
 
     id = 1;
-    //initEmployees(listOfEmployee, PAYROLL);
+    initEmployees(listOfEmployee, PAYROLL);
     do
     {
         option = mainMenu();
