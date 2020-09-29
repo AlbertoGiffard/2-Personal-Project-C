@@ -32,7 +32,6 @@ int initEmployees(Employee list[], int count)
     for (i = 0; i  < count; i++)
     {
         list[i].isEmpty = 1;
-        list[i].aboveAvg = '.';
     }
 
     return 0;
@@ -324,6 +323,7 @@ int sortEmployees(Employee list[], int count)
 {
     int i;
     int j;
+    int onAvg;
     int sumSalary;
     int sumAvgSalary;
     int option;
@@ -441,8 +441,8 @@ int sortEmployees(Employee list[], int count)
     }
     sumSalary = totalSalary(list, count);
     sumAvgSalary = avgSalary(list, count);
-    aboveAvg(list, count);
-    printEmployees(list, count, sumSalary, sumAvgSalary);
+    onAvg = aboveAvg(list, count, sumAvgSalary);
+    printEmployees(list, count, sumSalary, sumAvgSalary, onAvg);
     return 0;
 }
 float totalSalary(Employee list[], int count)
@@ -466,55 +466,61 @@ float avgSalary(Employee list[], int count)
 {
     int i;
     float total;
+    int counter;
 
     total = 0;
+    counter = 0;
 
     for (i = 0; i < count; i++)
     {
         if (list[i].isEmpty != 1)
         {
             total += list[i].salary;
+            counter++;
         }
 
     }
-    total = total / i;
+    total = total / counter;
     return total;
 }
-int aboveAvg(Employee list[], int count)
+int aboveAvg(Employee list[], int count, float totalAvg)
 {
     int i;
-    int avg;
+    int sumAvg;
 
-    avg = avgSalary(list, count);
+    sumAvg = 0;
 
     for (i = 0; i < count; i++)
     {
-        if (list[i].salary >= avg)
+        if (list[i].salary >= totalAvg && list[i].isEmpty != 1)
         {
-            list[i].aboveAvg = 'X';
-        }
-        else
-        {
-            list[i].aboveAvg = '.';
+            sumAvg++;
         }
     }
-    return 0;
+    return sumAvg;
 }
-int printEmployees(Employee list[], int count, float totalSalary, float avgSalary)
+int printEmployees(Employee list[], int count, float totalSalary, float avgSalary, int topAvg)
 {
     int i;
-    printf("-------------------------------------------------------------------------------------------------------------------\n");
-    printf("| ID |  Nombre y Apellido  | Sector |   Salario   | Sobre el Promedio  | Promedio del Salario | Total de Salarios |\n");
-    printf("-------------------------------------------------------------------------------------------------------------------\n");
+    /**
+    * Acá muestro el primer print donde esta el promedio, total y cuantos empleados
+    */
+    printf("------------------------------------------------------------------------------------------------------------------\n");
+    printf("| \t%s\t | \t%s\t | %s |\n", "Promedio de Salarios","Total de Salarios","Cuántos Empleados Superan el Salario Promedio");
+    printf("------------------------------------------------------------------------------------------------------------------\n");
+    printf("             %.2f\t\t            %.2f\t\t                  %d Empleado/s\n", avgSalary, totalSalary, topAvg);
+    /**
+    * Acá muestro el segundo y ultimo print donde estan los datos de los empleados
+    */
+    printf("--------------------------------------------------\n");
+    printf("%s %1s %s %4s %s %4s %s %s %s %4s %4s\n","|", "ID", "|", "Nombre", "y", "Apellido", "|", "Sector", "|", "  Salario", "|");
+    printf("--------------------------------------------------\n");
+
     for (i = 0; i < count; i++)
     {
-        if (list[i].isEmpty != 1 && i == 0)
+        if (list[i].isEmpty != 1)
         {
-            printf("| %d \t%s %1s %7d \t%.2f %12c \t\t%15.2f %21.2f     |\n", list[i].id, list[i].name, list[i].lastName, list[i].sector, list[i].salary, list[i].aboveAvg, avgSalary, totalSalary);
-        }
-        else if(list[i].isEmpty != 1)
-        {
-            printf("| %d \t%s %1s %8d \t%.2f %12c          |\n", list[i].id, list[i].name, list[i].lastName, list[i].sector, list[i].salary, list[i].aboveAvg);
+            printf("  %-5d %4s %-12s %-7d %-20.2f \n", list[i].id, list[i].name, list[i].lastName, list[i].sector, list[i].salary);
         }
     }
 

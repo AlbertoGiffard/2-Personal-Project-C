@@ -5,7 +5,6 @@ struct
  int id;
  int isEmpty;
  int sector;
- char aboveAvg;
  char lastName[51];
  char name[51];
  float salary;
@@ -34,12 +33,12 @@ int findEmployeeById(Employee[], int, int);
 //Ordena el array de empleados por apellido y sector de manera ascendente o descendente
 int sortEmployees(Employee[], int);
 //Imprime el array de empleados de forma encolumnada
-int printEmployees(Employee[], int, float, float);
+int printEmployees(Employee[], int, float, float, int);
 //para determinar total y promedio
 float totalSalary(Employee[], int);
 float avgSalary(Employee[], int);
 // para determinar que este sobre el promedio
-int aboveAvg(Employee[], int);
+int aboveAvg(Employee[], int, float);
 
 
 #endif // ARRAYEMPLOYEES_H_INCLUDED
